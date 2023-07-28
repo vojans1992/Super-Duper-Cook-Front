@@ -7,7 +7,7 @@ function App() {
   return <>
 
 
-    <List>
+    <List> 
       <ListItem component={NavLink} to="ingredients">
         <ListItemButton>
           <ListItemText primary="Ingredients" />
