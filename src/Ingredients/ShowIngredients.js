@@ -19,7 +19,7 @@ const ShowIngredients = () => {
         }));
     }, [q, ingredients]);
 
-    return <Container>
+    return (<Container>
         <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
 
             <FormControl sx={{ width: "30%" }}>
@@ -81,6 +81,7 @@ const ShowIngredients = () => {
             </Table>
         </TableContainer>
     </Container>
+    )
 }
 
 export default ShowIngredients;

@@ -35,7 +35,7 @@ const router = createBrowserRouter([
     children: [
 
       {
-        path: "ingredients",
+        path: "/ingredients",
         element: <ShowIngredients/>,
         errorElement: <ErrorDisplay entity='sastojaka.'/>,
         action: async () => {
