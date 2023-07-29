@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useLoaderData, useNavigat, useFetcher } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLoaderData, useFetcher, useNavigate } from "react-router-dom";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { Container, Box, Button, TextField, FormControl, Stack } from "@mui/material";
 
@@ -67,12 +67,12 @@ const ShowIngredients = () => {
                                     alert('Uspesno ste obrisali sastojak.');
 
                                 }}>
-                                    <Delete />
+                                    {/* <Delete /> */}
                                 </IconButton>
                                 <IconButton onClick={e => {
                                     navigation(`/ingredients/${i.id}`);
                                 }}>
-                                    <Edit />
+                                    {/* <Edit /> */}
                                 </IconButton>
                             </Stack>
                         </TableCell>
