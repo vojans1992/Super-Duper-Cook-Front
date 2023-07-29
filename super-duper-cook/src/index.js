@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import IngredientList from './IngredientList';
+import Login from './Login'; // Importujemo komponentu za stranicu za login
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
         return [];
       }
     }
+  },
+  {
+    path: '/login', // Putanja za stranicu za login
+    element: <Login />, // Koristimo komponentu Login za ovu rutu
   },
 ]);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './index.css';
+import './App.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Menu = () => {
@@ -16,7 +16,10 @@ const Menu = () => {
         <li>
           <Link to="/ingredients">Ingredients</Link>
         </li>
-        
+        {/* Dodajte Link oko ikonice za prelazak na stranicu za login */}
+        <Link to="/login">
+          <AccountCircleIcon className="menu-icon" />
+        </Link>
       </ul>
     </div>
   );
