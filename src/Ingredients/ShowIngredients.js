@@ -55,7 +55,9 @@ const ShowIngredients = () => {
                         <TableCell>{i.fat}</TableCell>
                         <TableCell>{i.saturatedFat}</TableCell>
                         <TableCell>{i.protein}</TableCell>
-                        <TableCell>{i.allergens}</TableCell>
+                        <TableCell>
+                            {i.allergens.map(a => a.name)}
+                            </TableCell>
 
                         <TableCell>
                             <Stack direction='row'>

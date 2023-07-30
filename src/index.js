@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom/client';
 // import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {RouterProvider, createBrowserRouter, useRouteError} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter, useRouteError } from 'react-router-dom';
 import ShowIngredients from './Ingredients/ShowIngredients';
+import ShowRecipes from './Recipes/ShowRecipes'
 import { Box, Container, Stack, Typography } from '@mui/material';
 import NewIngredient from './Ingredients/NewIngredient';
+import NewRecipe from './Recipes/NewRecipe';
 
 const ErrorDisplay = ({ entity }) => {
   const error = useRouteError();
@@ -32,14 +34,14 @@ const router = createBrowserRouter([
 
   {
     path: '/',
-    element: <App/>,
+    element: <App />,
     children: [
 
       {
         path: "ingredients",
-        element: <ShowIngredients/>,
-        errorElement: <ErrorDisplay entity='sastojaka.'/>,
-        loader: async () => { 
+        element: <ShowIngredients />,
+        errorElement: <ErrorDisplay entity='sastojaka.' />,
+        loader: async () => {
           return fetch('http://localhost:8080/api/v1/ingredients');
         },
         // action: async () => {
@@ -50,23 +52,44 @@ const router = createBrowserRouter([
         //       // "Authorization": JSON.parse(localStorage.getItem('user')).token,
         //       //"Accept": "application/json"              
         //     },
-                      
+
         //   });
         // }
       },
       {
         path: 'ingredients/new_ingredient',
-        element: <NewIngredient/>,
+        element: <NewIngredient />,
         errorElement: <ErrorDisplay entity='sastojaka.' />,
         loader: async () => {
-          
+
           const allergens_a = await fetch('http://localhost:8080/api/v1/allergen');
           const allergens = await allergens_a.json();
 
           return [allergens];
         }
-      }, 
+      },
+      {
+        path: "recipes",
+        element: <ShowRecipes />,
+        errorElement: <ErrorDisplay entity='recepata.' />,
+        loader: async () => {
+          return fetch('http://localhost:8080/api/v1/recipes');
+        },
+      },
+      {
+        path: "recipes/new_recipe",
+        element: <NewRecipe />,
+        errorElement: <ErrorDisplay entity='recepata.' />,
+        loader: async () => {
+          const ingredients_a = await fetch('http://localhost:8080/api/v1/ingredients');
+          const ingredients = await ingredients_a.json();
 
+          const authors_a = await fetch('http://localhost:8080/api/v1/cook');
+          const authors = await authors_a.json();
+
+          return [ingredients, authors];
+        },
+      }
 
 
 

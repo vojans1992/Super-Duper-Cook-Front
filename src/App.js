@@ -14,6 +14,11 @@ function App() {
           <ListItemText primary="Ingredients" />
         </ListItemButton>
       </ListItem>
+      <ListItem component={NavLink} to="recipes">
+        <ListItemButton>
+          <ListItemText primary="Recipes" />
+        </ListItemButton>
+      </ListItem>
 
     </List>
 
