@@ -14,19 +14,19 @@ const ShowIngredients = () => {
 
     useEffect(() => {
         setCurrentIngredients(ingredients.filter(v => {
-            return v.name.toLowerCase().includes(q.toLocaleLowerCase()) ||
-                v.lallergens.toLowerCase().includes(q.toLocaleLowerCase())
+            return v.name.toLowerCase().includes(q.toLocaleLowerCase()) 
+            // || v.allergens.toLowerCase().includes(q.toLocaleLowerCase())
         }));
     }, [q, ingredients]);
 
-    return (<Container>
+    return <Container>
         <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
 
             <FormControl sx={{ width: "30%" }}>
                 <TextField placeholder="Search..." value={q} onChange={e => setQ(e.target.value)} sx={{ flexGrow: 1 }} />
             </FormControl>
 
-            <Button variant="outlined" onClick={() => { navigation('/ingredients/new') }}>Add New Ingredient</Button>
+            <Button variant="outlined" onClick={() => { navigation('new_ingredient') }}>Add New Ingredient</Button>
         </Box>
         <TableContainer component={Paper}>
             <Table>
@@ -81,7 +81,7 @@ const ShowIngredients = () => {
             </Table>
         </TableContainer>
     </Container>
-    )
+    
 }
 
 export default ShowIngredients;

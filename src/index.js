@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {RouterProvider, createBrowserRouter, useRouteError} from 'react-router-dom';
 import ShowIngredients from './Ingredients/ShowIngredients';
 import { Box, Container, Stack, Typography } from '@mui/material';
+import NewIngredient from './Ingredients/NewIngredient';
 
 const ErrorDisplay = ({ entity }) => {
   const error = useRouteError();
@@ -35,21 +36,36 @@ const router = createBrowserRouter([
     children: [
 
       {
-        path: "/ingredients",
+        path: "ingredients",
         element: <ShowIngredients/>,
         errorElement: <ErrorDisplay entity='sastojaka.'/>,
-        action: async () => {
-          return fetch ('http://localhost:8080/api/v1/ingredients', {
-            method: 'GET',
-            headers: {
-              "Content-Type": "application/json",
-              // "Authorization": JSON.parse(localStorage.getItem('user')).token,
-              //"Accept": "application/json"              
-            },
+        loader: async () => { 
+          return fetch('http://localhost:8080/api/v1/ingredients');
+        },
+        // action: async () => {
+        //   return fetch ('http://localhost:8080/api/v1/ingredients', {
+        //     method: 'GET',
+        //     headers: {
+        //       "Content-Type": "application/json"
+        //       // "Authorization": JSON.parse(localStorage.getItem('user')).token,
+        //       //"Accept": "application/json"              
+        //     },
                       
-          });
-        }
+        //   });
+        // }
       },
+      {
+        path: 'ingredients/new_ingredient',
+        element: <NewIngredient/>,
+        errorElement: <ErrorDisplay entity='sastojaka.' />,
+        loader: async () => {
+          
+          const allergens_a = await fetch('http://localhost:8080/api/v1/allergen');
+          const allergens = await allergens_a.json();
+
+          return [allergens];
+        }
+      }, 
 
 
 

@@ -1,10 +1,11 @@
 // import logo from './logo.svg';
 //import './App.css';
 import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
 function App() {
   return <>
+
 
 
     <List> 
@@ -16,7 +17,7 @@ function App() {
 
     </List>
 
-
+    <Outlet></Outlet> 
   
 
   </>
