@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, useFetcher, useNavigate } from "react-router-dom";
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem } from "@mui/material";
 import { Container, Box, Button, TextField, FormControl, Stack } from "@mui/material";
 
 
@@ -55,7 +55,7 @@ const ShowIngredients = () => {
                         <TableCell>{i.fat}</TableCell>
                         <TableCell>{i.saturatedFat}</TableCell>
                         <TableCell>{i.protein}</TableCell>
-                        <TableCell>{i.allergens}</TableCell>
+                        <TableCell> {i.allergens.map((a) => <MenuItem value={a.id}> {a.name} </MenuItem> )} </TableCell>
 
                         <TableCell>
                             <Stack direction='row'>
