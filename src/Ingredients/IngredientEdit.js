@@ -1,19 +1,30 @@
-import { Container, Box, TextField, Typography, Chip, Autocomplete, Stack, Button, FormControl, FormHelperText } from "@mui/material";
-import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Box, TextField, Container, FormControl, InputLabel, Select, MenuItem, FormHelperText, Button} from "@mui/material";
 
-const NewIngredient = () => {
 
-    const [name, setName] = useState('');
-    const [munit, setMunit] = useState('');
-    const [calories, setCalories] = useState('');
-    const [chydrate, setChydrate] = useState('');
-    const [sugar, setSugar] = useState('');
-    const [fat, setFat] = useState('');
-    const [saturatedFat, setSaturatedFat] = useState('');
-    const [protein, setProtein] = useState('');
-    const [selectedAllergens, setSelectedAllergens] = useState([]);
-    const [selectedAllergen, setSelectedAllergen] = useState(null);
+const IngredientEdit = () => {
+
+   
+    const data = useLoaderData();
+    const ingredient = data[0];
+    const allergen = data[1];
+
+    console.log(ingredient);
+    console.log(allergen);
+
+    const navigate = useNavigate();
+
+    const [name, setName] = useState(ingredient.name);
+    const [munit, setMunit] = useState(ingredient.measurementUnit);
+    const [calories, setCalories] = useState(ingredient.calories);
+    const [chydrate, setChydrate] = useState(ingredient.carboHydrate);
+    const [sugar, setSugar] = useState(ingredient.sugar);
+    const [fat, setFat] = useState(ingredient.fat);
+    const [saturatedFat, setSaturatedFat] = useState(ingredient.saturatedFat);
+    const [protein, setProtein] = useState(ingredient.protein);
+    const [allergens, setAllergens] = useState(ingredient.allergens);
+ 
 
     const [globalError, setGlobalError] = useState(false);
     const errorMessageTemplate = "Please enter the ";
@@ -27,17 +38,17 @@ const NewIngredient = () => {
     const [proteinError, setProteinError] = useState("");
     const [allergenError, setAllergenError] = useState("");
 
-    const loader_data = useLoaderData();
-    const [allergens, setAllergens] = useState(loader_data[0]);
+    
+    
+    const updateIngredient = async () => {
 
-    const navigate = useNavigate();
-
-    const save = async () => {
-
-        if (name == '' || munit == '' || calories == '' || chydrate == '' || sugar == '' || fat == '' || saturatedFat == '' || protein == '' || selectedAllergens.size == 0) {
+        if (name == '' || munit == '' || calories == '' || chydrate == '' || sugar == '' || fat == '' || saturatedFat == '' || protein == '') {
             setGlobalError('Please fill all fields in the form');
             return;
         }
+        console.log(name);
+        console.log(allergens);
+
         const new_ingredient = {
             'name': name,
             'measurementUnit': munit,
@@ -47,49 +58,51 @@ const NewIngredient = () => {
             'fat': fat,
             'saturatedFat': saturatedFat,
             'protein': protein,
-            'allergens': selectedAllergens
+            'allergens': [allergens]
         };
-        let response = await fetch('http://localhost:8080/api/v1/ingredients/new', {
-            method: 'POST',
+        let response = await fetch(`http://localhost:8080/api/v1/ingredients/dto/${ingredient.id}`, {
+            method: "PUT",
+            //mode: 'cors',
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
+                //  "Authorization": JSON.parse(localStorage.getItem('user')).token,
+                //  "Accept": "application/json"
             },
-            body: JSON.stringify(new_ingredient)
+             body: JSON.stringify(new_ingredient),
         });
         console.log(response);
         if (response.ok) {
             let d = await response.json();
-            console.log(JSON.stringify(d));
-            alert('Uspesno ste dodali novi sastojak');
-            navigate('/ingredients');
+            console.log(JSON.stringify(d, null, 4));
+            alert("Uspesno ste izmenili sastojak.");
+            navigate("/ingredients");
         } else {
-            console.log('Dodavanje novog sastojka nije uspelo')
-            console.log(response);
+            console.log("Izmena sastojka nije uspela");
+            console.log(await response.text()); // Log the response body
+            console.log(response.statusText); // Log the status text
         }
     }
 
     return <>
-
-        <Container maxWidth="sm" sx={{ paddingTop: "15px" }}>
+        <Container maxWidth="sm">
             <Box
                 component="form"
                 sx={{
-                    display: 'flex',
-                    gap: '10px',
-                    flexDirection: 'column',    //slozeni mogu da se pisu i ovako - "flex-direction":'column',
-                    alignItems: "center",
-
+                    display: "flex",
+                    gap: "10px",
+                    "flex-direction": "column",
+                    "align-items": "center",
                     "& .MuiTextField-root": { m: 1, width: "100%" },
                 }}
                 noValidate
-                autoComplete="off">
-                <Typography variant="h6">Please enter the values of the new ingredient.</Typography>
-
+                autoComplete="off"
+            >
                 <TextField
                     sx={{ width: "100%" }}
                     fullWidth
                     required
                     id="outlined-required"
+                    value={name}
                     label="Ingredient name"
                     placeholder="Ingredient name"
                     helperText={nameError}
@@ -105,6 +118,7 @@ const NewIngredient = () => {
                     fullWidth
                     required
                     id="outlined-munit-input"
+                    value={munit}
                     label="Measurement Unit"
                     placeholder="Measurement Unit"
                     error={munitError}
@@ -126,6 +140,7 @@ const NewIngredient = () => {
                     fullWidth
                     required
                     id="outlined-calories-input"
+                    value={calories}
                     label="Calories"
                     placeholder="Calories"
                     error={caloriesError}
@@ -146,6 +161,7 @@ const NewIngredient = () => {
                     fullWidth
                     required
                     id="outlined-CarboHydrate-input"
+                    value={chydrate}
                     label="CarboHydrate"
                     placeholder="CarboHydrate"
                     error={chydrateError}
@@ -167,6 +183,7 @@ const NewIngredient = () => {
                     fullWidth
                     required
                     id="outlined-Sugar-input"
+                    value={sugar}
                     label="Sugar"
                     placeholder="Sugar"
                     error={sugarError}
@@ -188,6 +205,7 @@ const NewIngredient = () => {
                     fullWidth
                     required
                     id="outlined-Fat-input"
+                    value={fat}
                     label="Fat"
                     placeholder="Fat"
                     error={fatError}
@@ -209,6 +227,7 @@ const NewIngredient = () => {
                     fullWidth
                     required
                     id="outlined-SaturatedFat-input"
+                    value={saturatedFat}
                     label="SaturatedFat"
                     placeholder="SaturatedFat"
                     error={saturatedFatError}
@@ -230,6 +249,7 @@ const NewIngredient = () => {
                     required
                     id="outlined-Protein-input"
                     label="Protein"
+                    value={protein}
                     placeholder="Protein"
                     error={proteinError}
                     helperText={proteinError}
@@ -245,53 +265,58 @@ const NewIngredient = () => {
                     }}
                 />
 
-                <FormControl sx={{ width: "100%" }} error={allergenError}>
-
-                    <Stack direction='column'>
-                        <Typography> Allergens</Typography>
-
-                        <Stack direction='row'>
-                            {
-                                selectedAllergens.map((a, ii) => <Chip
-                                    label={a} onDelete={() => {
-                                        const a = selectedAllergens.filter((v, i) => i != ii);
-                                        setSelectedAllergens(a);
-                                    }}
-                                />)
+                <FormControl sx={{ width: "100%" }} >
+                    <InputLabel id="select-allergen-label">Allergens</InputLabel>
+                    <Select
+                        labelId="select-allergen-label"
+                        id="allergen-select"
+                        label="Allergens"
+                        // value={allergens}
+                        required
+                        onChange={(e) => {
+                            setAllergens(e.target.value);
+                            if (e.target.value == 0) {
+                                setAllergenError("Please select the allergen");
+                            } else {
+                                setAllergenError("");
                             }
-                        </Stack>
-
-                        <Stack direction='row' sx={{ width: '100%' }}>
-                            <Autocomplete options={
-                                allergens.filter(a => selectedAllergens.every(vv => vv != a.name))}
-                                getOptionLabel={a => a.name}
-                                renderInput={(params) => <TextField {...params} />} sx={{ width: "90%" }}
-                                value={selectedAllergen} onChange={(e, v) => setSelectedAllergen(v)} />
-
-                            <Button disabled={selectedAllergen === null}
-                                onClick={() => {
-
-                                    if (selectedAllergen != null) {
-                                        let a = selectedAllergens;
-                                        a.push(selectedAllergen.name);
-                                        setSelectedAllergens(a);
-                                        setSelectedAllergen(null);
-                                    }
-                                }}
-                            > Add allergen</Button>
-                        </Stack>
-                    </Stack>
+                        }}
+                    >
+                        <MenuItem value="0">
+                            <em>None</em>
+                        </MenuItem>
+                        {allergen.map((a) => (
+                            <MenuItem value={a.name}> {a.name} </MenuItem>
+                        ))}
+                    </Select>
+                    <FormHelperText>{allergenError}</FormHelperText>
                 </FormControl>
 
-                <Button onClick={save} disabled={nameError || munitError || caloriesError || chydrateError || sugarError
-                    || fatError || saturatedFatError || proteinError || allergenError}>
-                    {" "}
-                    Save{" "}
+                <Button
+                    onClick={updateIngredient}
+                   
+                >
+                  
+                    Save
                 </Button>
                 <FormHelperText error={globalError}>{globalError}</FormHelperText>
+
+
             </Box>
         </Container>
     </>
-}
 
-export default NewIngredient;
+
+
+
+
+
+
+
+
+
+
+
+
+}
+export default IngredientEdit;

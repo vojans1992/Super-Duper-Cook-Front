@@ -7,6 +7,7 @@ import {RouterProvider, createBrowserRouter, useRouteError} from 'react-router-d
 import ShowIngredients from './Ingredients/ShowIngredients';
 import { Box, Container, Stack, Typography } from '@mui/material';
 import NewIngredient from './Ingredients/NewIngredient';
+import IngredientEdit from './Ingredients/IngredientEdit';
 
 const ErrorDisplay = ({ entity }) => {
   const error = useRouteError();
@@ -66,6 +67,50 @@ const router = createBrowserRouter([
           return [allergens];
         }
       }, 
+      {
+        path: "ingredients/:id",
+        element: <IngredientEdit/>,
+        errorElement: <ErrorDisplay entity='sastojaka.'/>,    
+        loader: async ({ params }) => {
+
+          const ingredient_i = await fetch(`http://localhost:8080/api/v1/ingredients/${params.id}`);
+          const ingredient = await ingredient_i.json();        
+          const allergen_a = await fetch("http://localhost:8080/api/v1/allergen");
+          const allergen = await allergen_a.json(); 
+
+          return [ingredient, allergen];
+        },
+        action: async ({ params, request }) => {
+          if (request.method === 'DELETE') {
+            return fetch(`http://localhost:8080/api/v1/ingredients/${params.id}`, {
+              method: 'DELETE',
+              //mode: 'cors',
+              headers: {
+                "Content-Type": "application/json",
+                // "Authorization": JSON.parse(localStorage.getItem('user')).token,
+                // "Accept": "application/json"
+              },
+            }
+            );
+          } else if (request.method === 'PUT') {
+            let data = Object.fromEntries(await request.formData());
+            //data.teachers = JSON.parse(data.teachers);    
+            console.log(JSON.stringify(data, null, 4));       
+            return fetch(`http://localhost:8080/api/v1/ingredients/${params.id}`, {
+              method: 'PUT',
+              mode: 'cors',
+              headers: {
+                "Content-Type": "application/json",
+                // "Authorization": JSON.parse(localStorage.getItem('user')).token,
+                // "Accept": "application/json"
+              },
+              body: JSON.stringify(data)
+            });
+          }
+        }
+      },
+
+
 
 
 
